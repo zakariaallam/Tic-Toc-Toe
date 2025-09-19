@@ -1,5 +1,6 @@
 let nam1 = localStorage.getItem("name1")
 let nam2 = localStorage.getItem("name2")
+let grad = localStorage.getItem("grid")
 
 let body = document.querySelector(".body");
 let f = document.getElementById("f");
@@ -9,14 +10,14 @@ let restart = document.getElementById("restart");
 let change_grid = document.getElementById("change_grid");
 let out = document.getElementById("out");
 let turn = document.getElementById("turn");
-let grad = document.getElementById("grad");
+
 
 player1.textContent = nam1 +" :"
 player2.textContent = nam2 +" :"
+turn.innerHTML = "turn : " + nam1;
 let buton=[];
-grad = 3
     let change = "X";
-    let numbre = 1;
+    let turn_player = nam1;
     let contur_X = 0;
     let contur_O = 0;
     let length = grad*grad
@@ -31,9 +32,11 @@ for(let i=0;i<length;i++){
 function click(){
     for(let i=0;i<length;i++){
         buton[i].addEventListener("click",function(){
-            tern_player()
-           X_or_O(i);
-           is_win();
+            if(buton[i].textContent == ""){
+               tern_player()
+               X_or_O(i);
+               is_win();
+            }
         });
         
     }
@@ -47,40 +50,33 @@ function X_or_O(i){
         }
     }
     let value ;
-    function is_win(){
-         value = "";
-        for(let i=0;i<grad;i++){
-            value += buton[i].textContent
-        }
-        if(value == "X".repeat(grad)|| value == "O".repeat(grad)){
-            scor(value);
-            cleardata();
-        }
+     function is_win(){
+// ---------------- rows---------------------
+       for(let i=0;i<grad;i++){
+        value ="";
+           for(let j=0;j<grad;j++){
+            value += buton[i*grad+j].textContent
+           }
+           if(value == "X".repeat(grad)|| value == "O".repeat(grad)){
+               scor(value);
+               cleardata();
+               return;
+           }
+       }
+// ----------------- colomns -------------------
+       for(let i=0;i<length;i++){
         value = "";
-        for(let i=length-grad;i<length;i++){
-            value += buton[i].textContent
-        }
-        if(value == "X".repeat(grad) || value == "O".repeat(grad)){
-            scor(value);
-            cleardata();
-        }
-         value = "";
-        for(let i=0;i<length;i=i+grad){
-            value += buton[i].textContent
-        }
-        if(value == "X".repeat(grad) || value == "O".repeat(grad)){
-            scor(value);
-            cleardata();
-        }
-         value = "";
-        for(let i=grad-1;i<length;i=i+grad){
-            value += buton[i].textContent
-        }
-        if(value == "X".repeat(grad) || value == "O".repeat(grad)){
-            scor(value);
-            cleardata();
-        }
-         value = "";
+          for(let j=0;j<length;j++){
+            value += buton[j*grad+i].textContent
+          }
+          if(value == "X".repeat(grad)|| value == "O".repeat(grad)){
+               scor(value);
+               cleardata();
+               return;
+           }
+       }
+// ----------------- splice -------------
+              value = "";
         for(let i=0;i<length;i=i+(grad+1)){
             value += buton[i].textContent
         }
@@ -115,12 +111,12 @@ function X_or_O(i){
     }
 
     function tern_player(){
-        if(numbre == 1){
-            numbre =2;
+        if(turn_player == nam1){
+            turn_player =nam2;
         }else{
-            numbre =1
+            turn_player =nam1;
         }
-        turn.innerHTML = `turn player ${numbre}`
+        turn.innerHTML = `turn : ${turn_player}`
     }
 
     function scor(check){
